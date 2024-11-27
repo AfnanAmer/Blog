@@ -4,12 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Footer from './components/Footer';
-import BlogPost from './components/BlogPost';
-import BlogList from './components/BlogList';
+import CreateBlog from './components/CreateBlog';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BlogList />
+    <CreateBlog />
   </React.StrictMode>
 );
 
