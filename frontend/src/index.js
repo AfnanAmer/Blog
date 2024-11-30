@@ -8,7 +8,7 @@ import CreateBlog from './components/CreateBlog';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CreateBlog />
+    <App />
   </React.StrictMode>
 );
 
