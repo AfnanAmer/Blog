@@ -1,5 +1,5 @@
-fastapi
-sqlalchemy
-pydantic
+fastapi[all]
 uvicorn
+sqlalchemy
 python-dotenv
+python-multipart
