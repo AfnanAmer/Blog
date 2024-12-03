@@ -53,6 +53,7 @@ def verify_api_key(api_key: str = Depends(api_key_header)):
         )
     return api_key
 
+# Testing
 @app.get("/allblogs", response_model=List[schemas.Blog])
 def get_all_blogs(
     api_key: str = Depends(verify_api_key),
@@ -65,8 +66,7 @@ def get_all_blogs(
 
 
 
-# Routes with API Key protection
-# Add pagination to display 4 blogs per page                                     
+# Routes with API Key protection                                   
 @app.get("/blogs", response_model=schemas.BlogResponse)
 def get_blogs(
     api_key: str = Depends(verify_api_key),
@@ -81,7 +81,6 @@ def get_blogs(
     }
     
     
-    # create a route to get blogs by category and apply  pagination
 @app.get("/blogs/category/{category}", response_model=schemas.BlogResponse)
 def get_blogs_by_category(
     category: str,
@@ -96,7 +95,7 @@ def get_blogs_by_category(
 
 @app.post("/api/create-blog", response_model=schemas.Blog)
 def create_blog(blog: schemas.BlogCreate, api_key: str = Depends(verify_api_key), db: Session = Depends(get_db)):
-    db_blog = models.Blog(title=blog.title, body=blog.body)
+    db_blog = models.Blog(title=blog.title, body=blog.body, category=blog.category, image_url=blog.image_url)
     db.add(db_blog)
     db.commit()
     db.refresh(db_blog)

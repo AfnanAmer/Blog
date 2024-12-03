@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 function CreateBlog() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [image_url, setImage_url] = useState('');
+  const [category, setCategory] = useState('technology'); // Default value
   const [error, setError] = useState('');
   const navigate = useNavigate();
   
@@ -11,7 +13,7 @@ function CreateBlog() {
     e.preventDefault();
     setError('');
     try {
-      console.log('Sending data:', { title, body });
+      console.log('Sending data:', { title, body, image_url, category });
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/create-blog`, {
         method: 'POST',
         headers: {
@@ -22,7 +24,7 @@ function CreateBlog() {
         credentials: 'include',
 
         // Send the blog data as a JSON string
-        body: JSON.stringify({ title, body })
+        body: JSON.stringify({ title, body, image_url, category })
       });
 
       const data = await response.json();
@@ -34,6 +36,8 @@ function CreateBlog() {
 
       setTitle('');
       setBody('');
+      setImage_url('');
+      setCategory('technology');
       // Optionally refresh the blog list or show a success message
       navigate('/');
       
@@ -69,6 +73,41 @@ function CreateBlog() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter your blog title"
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                Category
+              </label>
+              <select
+                name="category"
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm
+                focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                required
+              >
+                <option value="technology">Technology</option>
+                <option value="lifestyle">Lifestyle</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">
+                Image URL
+              </label>
+              <input
+                type="url"
+                name="image_url"
+                id="image_url"
+                value={image_url}
+                onChange={(e) => setImage_url(e.target.value)}
+                placeholder="Enter image URL"
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
                 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 required
