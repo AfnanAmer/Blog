@@ -6,3 +6,5 @@ class Blog(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     body = Column(String, index=True)
+    image_url = Column(String)
+    category = Column(String, index=True)

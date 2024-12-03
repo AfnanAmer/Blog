@@ -1,9 +1,12 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 class BlogBase(BaseModel):
     title: str
     body: str
+    image_url: Optional[str] = None
+    category: Optional[str] = None
+
 
 class BlogCreate(BlogBase):
     pass
@@ -16,5 +19,3 @@ class Blog(BlogBase):
 
 class BlogResponse(BaseModel):
     items: List[Blog]
-    total_pages: int
-    current_page: int

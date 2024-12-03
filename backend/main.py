@@ -66,32 +66,33 @@ def get_all_blogs(
 
 
 # Routes with API Key protection
-# Add pagination to display 4 blogs per page                             
+# Add pagination to display 4 blogs per page                                     
 @app.get("/blogs", response_model=schemas.BlogResponse)
 def get_blogs(
-    page: int = Query(default=1, ge=1),
     api_key: str = Depends(verify_api_key),
     db: Session = Depends(get_db)
 ):
-    # Fixed page size of 4
-    per_page = 6 
-    skip = (page - 1) * per_page
-    
-    # Get total count and blogs
-    total_blogs = db.query(models.Blog).count()
     blogs = db.query(models.Blog)\
         .order_by(models.Blog.id.desc())\
-        .offset(skip)\
-        .limit(per_page)\
         .all()
     
-    total_pages = (total_blogs + per_page - 1) // per_page
-    
     return {
-        "items": blogs,
-        "total_pages": total_pages,
-        "current_page": page
+        "items": blogs
     }
+    
+    
+    # create a route to get blogs by category and apply  pagination
+@app.get("/blogs/category/{category}", response_model=schemas.BlogResponse)
+def get_blogs_by_category(
+    category: str,
+    api_key: str = Depends(verify_api_key),
+    db: Session = Depends(get_db)
+):
+    blogs = db.query(models.Blog)\
+        .filter(models.Blog.category == category)\
+        .order_by(models.Blog.id.desc())\
+        .all()
+    return {"items": blogs}
 
 @app.post("/api/create-blog", response_model=schemas.Blog)
 def create_blog(blog: schemas.BlogCreate, api_key: str = Depends(verify_api_key), db: Session = Depends(get_db)):
