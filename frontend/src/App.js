@@ -1,13 +1,18 @@
 import React from 'react';
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./Keycloak";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
 import CreateBlog from './components/CreateBlog';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import PrivateRoute from './components/PrivateRoute';
+
 
 function App() {
   return (
+    <ReactKeycloakProvider authClient={keycloak}>
     <Router>
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -15,12 +20,13 @@ function App() {
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/blog/:id" element={<BlogPost />} />
-            <Route path="/create" element={<CreateBlog />} />
+            <Route path="/create" element={<PrivateRoute><CreateBlog/></PrivateRoute>} />
           </Routes>
         </main>
         <Footer />
       </div>
-    </Router>
+      </Router>
+    </ReactKeycloakProvider>
   );
 }
 

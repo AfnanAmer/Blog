@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 function CreateBlog() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');

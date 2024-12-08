@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useKeycloak } from "@react-keycloak/web";
 import { Link } from 'react-router-dom';
 
 function BlogList() {
+  const { keycloak } = useKeycloak();
+
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -44,7 +47,7 @@ function BlogList() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div className="flex justify-start mb-6 space-x-4">
+        <div className="flex justify-between items-center mb-6">
           <div className="relative">
             <select
               value={selectedCategory}
@@ -53,7 +56,7 @@ function BlogList() {
             >
               <option value="">All Categories</option>
               <option to={`/blogs/category/${'technology'}`} value="technology">Technology</option>
-              <option to={`/blogs/category/${'lifestyle'}`}value="lifestyle">Lifestyle</option>
+              <option to={`/blogs/category/${'lifestyle'}`} value="lifestyle">Lifestyle</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,6 +64,9 @@ function BlogList() {
               </svg>
             </div>
           </div>
+          {keycloak.authenticated && (
+            <Link to="/create" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300">New Blog</Link>
+          )}
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -95,7 +101,7 @@ function BlogList() {
                   </div>
                 </div>
               </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
