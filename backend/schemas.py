@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 class BlogBase(BaseModel):
     title: str
@@ -19,3 +20,15 @@ class Blog(BlogBase):
 
 class BlogResponse(BaseModel):
     items: List[Blog]
+    
+    
+class Subscriber(BaseModel):
+    email: str
+    
+
+class SubscriberResponse(BaseModel):
+    message: str
+    email: str
+    
+    class Config:
+        orm_mode = True 

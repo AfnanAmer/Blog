@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import models
 import schemas
 import database
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -116,3 +117,40 @@ def delete_blog(blog_id: int, api_key: str = Depends(verify_api_key), db: Sessio
     db.delete(blog)
     db.commit()
     return {"message": "Blog deleted successfully"}
+
+# @app.get("/mailchimp/lists")
+# async def get_mailchimp_lists():
+
+@app.post("/subscribe", response_model=None)
+async def subscribe(subscriber: schemas.Subscriber):
+    # Get Mailchimp credentials from environment
+    mailchimp_api_key = os.getenv("MAILCHIMP_API_KEY")
+    mailchimp_dc = os.getenv("MAILCHIMP_DC")
+    mailchimp_list_id = os.getenv("MAILCHIMP_LIST_ID")
+    
+    if not all([mailchimp_api_key, mailchimp_dc, mailchimp_list_id]):
+        raise HTTPException(
+            status_code=500,
+            detail="Mailchimp configuration is missing"
+        )
+    
+    # Add to Mailchimp
+    url = f"https://{mailchimp_dc}.api.mailchimp.com/3.0/lists/{mailchimp_list_id}/members"
+    data = {
+        "email_address": subscriber.email,
+        "status": "subscribed"
+    }
+    
+    response = requests.post(
+        url, 
+        json=data, 
+        auth=("anystring", mailchimp_api_key)
+    )
+    
+    if response.status_code not in [200, 201]:
+        raise HTTPException(
+            status_code=response.status_code, 
+            detail=response.json()
+        )
+    
+    return {"message": "Subscription successful!", "email": subscriber.email}
