@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import CreateBlog from './components/CreateBlog';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
+  // <React.StrictMode> // It's causing issues with keycloak, so i'll disable it
     <App />
   // </React.StrictMode>
 );
