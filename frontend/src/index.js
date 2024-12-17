@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Footer from './components/Footer';
 import CreateBlog from './components/CreateBlog';
-import SubscribeForm  from './components/SubscribeForm';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
