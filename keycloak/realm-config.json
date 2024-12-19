@@ -1,0 +1,14 @@
+{
+  "realm": "myrealm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "my-react-app",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["https://*.onrender.com/*", "http://localhost:3000/*"],
+      "webOrigins": ["https://*.onrender.com", "http://localhost:3000"],
+      "defaultClientScopes": ["web-origins", "profile", "email"]
+    }
+  ]
+} 
