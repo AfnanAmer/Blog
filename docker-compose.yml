@@ -17,21 +17,30 @@ services:
       context: ./keycloak
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "${PORT}:8080"
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
       - KC_DB=dev-file
       - KC_FEATURES=docker
       - KC_HTTP_RELATIVE_PATH=/auth
       - KC_PROXY=edge
       - KC_HOSTNAME_STRICT=false
       - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
     volumes:
       - ./keycloak/themes:/opt/keycloak/themes
-    command:
+      - ./keycloak/data:/opt/keycloak/data
+    command: 
       - start-dev
       - --hostname=localhost
+      - --import-realm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - app-network
 
