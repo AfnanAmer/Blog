@@ -20,8 +20,8 @@ WORKDIR /opt/keycloak
 COPY realm-config.json /opt/keycloak/data/import/
 ENV KC_IMPORT=/opt/keycloak/data/import/realm-config.json
 
-RUN keycloak.sh build
+RUN /opt/keycloak/bin/kc.sh build
 
 EXPOSE 8080
 
-ENTRYPOINT ["keycloak.sh", "start", "--optimized"] 
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"] 
