@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build: ./backend
@@ -5,14 +7,46 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=sqlite:///./blog.db 
+    volumes:
+      - sqlite_data:/app
+    networks:
+      - app-network
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN} 
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_PORT: 8080
+      KC_HTTP_RELATIVE_PATH: "/"
     ports:
       - "8080:8080"
     volumes:
       - ./keycloak/themes:/opt/keycloak/themes
-    command: start-dev
-  
+    command:
+      - start-dev
+      - --hostname=localhost
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+      - keycloak
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  sqlite_data:

@@ -1,15 +1,24 @@
 import Keycloak from "keycloak-js";
 
+
+
+// Try with direct configuration first to test
 const keycloak = new Keycloak({
-  url: "http://localhost:8080",
-  realm: "myrealm",
-  clientId: "my-react-app",
+  url: process.env.REACT_APP_KEYCLOAK_URL,  // or your actual Keycloak server URL
+  realm: process.env.REACT_APP_KEYCLOAK_REALM,              // your realm name
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID           // your client ID
 });
 
 export const handleLogin = (currentPath) => {
+  console.log('Current path:', currentPath);
+  const redirectUri = `${window.location.origin}${currentPath || ''}`;
+  console.log('Redirect URI:', redirectUri);
+  
   keycloak.login({
-    redirectUri: `${window.location.origin}${currentPath || ''}`,
+    redirectUri: redirectUri,
     prompt: 'login'
+  }).catch(error => {
+    console.error('Login error:', error);
   });
 };
 
