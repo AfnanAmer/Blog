@@ -9,16 +9,17 @@ COPY realm-config.json /opt/keycloak/data/import/realm.json
 RUN /opt/keycloak/bin/kc.sh build
 
 # Production configurations
-ENV KC_DB=dev-file
-ENV KC_FEATURES=docker
-ENV KC_HTTP_RELATIVE_PATH=/auth
-ENV KC_PROXY=edge
-ENV KC_HOSTNAME_STRICT=false
-ENV KC_HOSTNAME_STRICT_HTTPS=false
-ENV KC_HEALTH_ENABLED=true
-ENV KC_METRICS_ENABLED=true
+ENV KC_DB=dev-file \
+    KC_FEATURES=docker \
+    KC_HTTP_RELATIVE_PATH=/auth \
+    KC_PROXY=edge \
+    KC_HOSTNAME_STRICT=false \
+    KC_HOSTNAME_STRICT_HTTPS=false \
+    KC_HEALTH_ENABLED=true \
+    KC_METRICS_ENABLED=true \
+    KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN} \
+    KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 
 EXPOSE 8080
 
-# Start command for production
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--import-realm", "--hostname-strict=false"]
